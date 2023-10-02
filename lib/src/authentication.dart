@@ -141,7 +141,12 @@ class Authentication implements AuthRepository {
             throw Failure('Rate limit exceeded. Please try again later.');
           }
         default:
-          throw Failure('Unknown error occurred.');
+          final responseData = jsonDecode(response.body);
+          if (responseData["error"] != null) {
+            throw Failure(responseData["message"]);
+          } else {
+            throw Failure('Unknown error occurred.');
+          }
       }
     } catch (e) {
       throw Failure(e.toString());
