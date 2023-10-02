@@ -1,7 +1,5 @@
 // ignore_for_file: must_be_immutable
 
-import 'dart:convert';
-
 import 'package:example/src/authentication.dart';
 import 'package:example/widgets/rounded_bordered_textfield.dart';
 import 'package:example/widgets/widget.dart';
@@ -67,8 +65,7 @@ class RegistrationForm extends StatefulWidget {
     required this.passwordController,
     required this.successRoutePage,
     this.btnText = 'Submit', // Provide a default button text
-    this.btnColor =
-        Colors.green, // Allow the button color to be null (optional)
+    this.btnColor = Colors.green, // Allow the button color to be null (optional)
   });
 
   @override
@@ -134,9 +131,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                   isPass: true,
                   icon: IconButton(
                     icon: Icon(
-                      _obscurePassword
-                          ? Icons.visibility_off
-                          : Icons.visibility,
+                      _obscurePassword ? Icons.visibility_off : Icons.visibility,
                       color: const Color.fromRGBO(115, 106, 185, 1),
                     ),
                     onPressed: () {
@@ -157,8 +152,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                       return 'Please enter your password';
                     } else if ((val?.length ?? 0) < 6) {
                       return 'Password is not up to 6 characters';
-                    } else if (((val?.length ?? 0) >= 6) &&
-                        ((val ?? "") != widget.passwordController.text)) {
+                    } else if (((val?.length ?? 0) >= 6) && ((val ?? "") != widget.passwordController.text)) {
                       return "Password texts don't match";
                     } else {
                       return null;
@@ -168,9 +162,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                   isPass: true,
                   icon: IconButton(
                     icon: Icon(
-                      _obscurePassword
-                          ? Icons.visibility_off
-                          : Icons.visibility,
+                      _obscurePassword ? Icons.visibility_off : Icons.visibility,
                       color: const Color.fromRGBO(115, 106, 185, 1),
                     ),
                     onPressed: () {
@@ -197,18 +189,15 @@ class _RegistrationFormState extends State<RegistrationForm> {
                       final password = (widget.passwordController).text;
                       final name = widget.nameController.text;
                       final authRepository = Authentication();
-                      final data =
-                          await authRepository.signUp(email, name, password);
+                      final data = await authRepository.signUp(email, name, password);
                       if (data != null) {
                         // Registration failed, display an error message
 
-                        showSnackbar(
-                            context, Colors.black, 'SignUp successful');
+                        showSnackbar(context, Colors.black, 'SignUp successful');
                         print('sign up Email >>> ${data.email}');
                         print('sign up id >>> ${data.id}');
                         print('sign up created at >>> ${data.createdAt}');
-                        Navigator.of(context)
-                            .pushNamed(widget.successRoutePage);
+                        Navigator.of(context).pushNamed(widget.successRoutePage);
                       } else {
                         print('errror:   eeeeeee');
                         showSnackbar(context, Colors.red, 'SignUp ERROR');

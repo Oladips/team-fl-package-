@@ -20,7 +20,7 @@ class ApiException implements Exception {
 
 class Authentication implements AuthRepository {
   @override
-  Future<User?> signUp(
+  Future signUp(
     String email,
     String name,
     String password,
@@ -39,34 +39,51 @@ class Authentication implements AuthRepository {
 
       switch (response.statusCode) {
         case 201:
-          final responseData = jsonDecode(response.body)['data'];
-
-          final user = User(
-            id: responseData['id'],
-            name: responseData['name'],
-            email: responseData['email'],
-            credits: responseData['credits'],
-          );
-
-          return user;
-
+          final responseData = jsonDecode(response.body);
+          return responseData;
         case 400:
-          throw Failure('Invalid input data.');
-
+          final responseData = jsonDecode(response.body);
+          if (responseData["error"] != null) {
+            throw Failure(responseData["message"]);
+          } else {
+            throw Failure('Invalid input data.');
+          }
         case 405:
-          throw Failure('The HTTP method used is not allowed for this endpoint.');
-
+          final responseData = jsonDecode(response.body);
+          if (responseData["error"] != null) {
+            throw Failure(responseData["message"]);
+          } else {
+            throw Failure('The HTTP method used is not allowed for this endpoint.');
+          }
         case 413:
-          throw Failure('The request body is too long');
+          final responseData = jsonDecode(response.body);
+          if (responseData["error"] != null) {
+            throw Failure(responseData["message"]);
+          } else {
+            throw Failure('The request body is too long');
+          }
 
         case 422:
-          throw Failure('The server cannot process the request due to invalid data.');
-
+          final responseData = jsonDecode(response.body);
+          if (responseData["error"] != null) {
+            throw Failure(responseData["message"]);
+          } else {
+            throw Failure('The server cannot process the request due to invalid data.');
+          }
         case 429:
-          throw Failure('Rate limit exceeded. Please try again later.');
-
+          final responseData = jsonDecode(response.body);
+          if (responseData["error"] != null) {
+            throw Failure(responseData["message"]);
+          } else {
+            throw Failure('Rate limit exceeded. Please try again later.');
+          }
         default:
-          throw Failure('Unknown error occurred.');
+          final responseData = jsonDecode(response.body);
+          if (responseData["error"] != null) {
+            throw Failure(responseData["message"]);
+          } else {
+            throw Failure('Unknown error occurred.');
+          }
       }
     } on SocketException {
       throw Failure('Please check your internet connection 😑');
@@ -95,13 +112,7 @@ class Authentication implements AuthRepository {
       );
       switch (response.statusCode) {
         case 200:
-          print(response.body);
           final responseData = jsonDecode(response.body);
-          // final user = User(
-          //   id: responseData['id'],
-          //   name: responseData['name'],
-          //   email: responseData['email'],
-          // );
           return responseData;
 
         case 400:
