@@ -7,8 +7,7 @@ import 'package:hng_authentication/src/models/user.dart';
 import 'package:http/http.dart' as http;
 
 class ApiConfig {
-  static const String baseUrl =
-      'https://spitfire-interractions.onrender.com/api/auth';
+  static const String baseUrl = 'https://spitfire-interractions.onrender.com/api/auth';
   static const Map<String, String> headers = {
     'Content-Type': 'application/json',
   };
@@ -16,13 +15,16 @@ class ApiConfig {
 
 class ApiException implements Exception {
   final String message;
-
   ApiException(this.message);
 }
 
 class Authentication implements AuthRepository {
   @override
-  Future<User?> signUp(String email, String name, String password) async {
+  Future<User?> signUp(
+    String email,
+    String name,
+    String password,
+  ) async {
     try {
       final response = await http.post(
         Uri.parse('${ApiConfig.baseUrl}/register'),
@@ -52,15 +54,13 @@ class Authentication implements AuthRepository {
           throw Failure('Invalid input data.');
 
         case 405:
-          throw Failure(
-              'The HTTP method used is not allowed for this endpoint.');
+          throw Failure('The HTTP method used is not allowed for this endpoint.');
 
         case 413:
           throw Failure('The request body is too long');
 
         case 422:
-          throw Failure(
-              'The server cannot process the request due to invalid data.');
+          throw Failure('The server cannot process the request due to invalid data.');
 
         case 429:
           throw Failure('Rate limit exceeded. Please try again later.');
@@ -80,7 +80,10 @@ class Authentication implements AuthRepository {
   }
 
   @override
-  Future signIn(String email, String password) async {
+  Future signIn(
+    String email,
+    String password,
+  ) async {
     try {
       final response = await http.post(
         Uri.parse('${ApiConfig.baseUrl}/login'),
@@ -92,6 +95,7 @@ class Authentication implements AuthRepository {
       );
       switch (response.statusCode) {
         case 200:
+          print(response.body);
           final responseData = jsonDecode(response.body)['data'];
           final user = User(
             id: responseData['id'],
@@ -104,15 +108,13 @@ class Authentication implements AuthRepository {
           throw Failure('Invalid input data.');
 
         case 405:
-          throw Failure(
-              'The HTTP method used is not allowed for this endpoint.');
+          throw Failure('The HTTP method used is not allowed for this endpoint.');
 
         case 413:
           throw Failure('The request body is too long');
 
         case 422:
-          throw Failure(
-              'The server cannot process the request due to invalid data.');
+          throw Failure('The server cannot process the request due to invalid data.');
 
         case 429:
           throw Failure('Rate limit exceeded. Please try again later.');
@@ -161,15 +163,13 @@ class Authentication implements AuthRepository {
           throw Failure('Invalid input data.');
 
         case 405:
-          throw Failure(
-              'The HTTP method used is not allowed for this endpoint.');
+          throw Failure('The HTTP method used is not allowed for this endpoint.');
 
         case 413:
           throw Failure('The request body is too long');
 
         case 422:
-          throw Failure(
-              'The server cannot process the request due to invalid data.');
+          throw Failure('The server cannot process the request due to invalid data.');
 
         case 429:
           throw Failure('Rate limit exceeded. Please try again later.');
