@@ -40,7 +40,10 @@ class Authentication implements AuthRepository {
       switch (response.statusCode) {
         case 201:
           final responseData = jsonDecode(response.body);
-          return responseData;
+          return {
+            "response": responseData,
+            "headers": response.headers,
+          };
         case 400:
           final responseData = jsonDecode(response.body);
           if (responseData["error"] != null) {
@@ -112,9 +115,11 @@ class Authentication implements AuthRepository {
       );
       switch (response.statusCode) {
         case 200:
-          print(response.headers);
           final responseData = jsonDecode(response.body);
-          return responseData;
+          return {
+            "response": responseData,
+            "headers": response.headers,
+          };
 
         case 400:
           final responseData = jsonDecode(response.body);
@@ -181,11 +186,14 @@ class Authentication implements AuthRepository {
   }
 
   @override
-  Future getUser() async {
+  Future getUser(String cookie) async {
     try {
       final response = await http.get(
         Uri.parse('${ApiConfig.baseUrl}/@me'),
-        headers: ApiConfig.headers,
+        headers: ApiConfig.headers
+          ..addAll({
+            "Cookie": cookie,
+          }),
       );
       switch (response.statusCode) {
         case 200:
