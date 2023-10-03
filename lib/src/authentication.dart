@@ -197,13 +197,11 @@ class Authentication implements AuthRepository {
       );
       switch (response.statusCode) {
         case 200:
-          final responseData = jsonDecode(response.body)['data'];
-          final user = User(
-            id: responseData['id'],
-            name: responseData['name'],
-            email: responseData['email'],
-          );
-          return user;
+          final responseData = jsonDecode(response.body);
+          return {
+            "response": responseData,
+            "headers": response.headers,
+          };
 
         case 400:
           final responseData = jsonDecode(response.body);
