@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:hng_authentication/src/authentication_repository.dart';
 import 'package:hng_authentication/src/models/failure.dart';
-import 'package:hng_authentication/src/models/user.dart';
 import 'package:http/http.dart' as http;
 
 class ApiConfig {
@@ -190,10 +189,10 @@ class Authentication implements AuthRepository {
     try {
       final response = await http.get(
         Uri.parse('${ApiConfig.baseUrl}/@me'),
-        headers: ApiConfig.headers
-          ..addAll({
-            "Cookie": cookie,
-          }),
+        headers: {
+          'Content-Type': 'application/json',
+          'Cookie': cookie,
+        },
       );
       switch (response.statusCode) {
         case 200:
